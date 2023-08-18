@@ -15,10 +15,10 @@ import java.util.function.Function;
 @Mixin(CyclingButtonWidget.class)
 public class OptionButtonWidgetMixin {
 
-    @Shadow @Final private Function<?, Text> valueToText;
+    @Shadow @Final private Function<?, Text> field_27967;
 
     @Inject(method = "cycle", at = @At("TAIL"))
     public void onClickOption(CallbackInfo ci) {
-        InGameTimerUtils.CHANGED_OPTIONS.add(this.valueToText);
+        InGameTimerUtils.CHANGED_OPTIONS.add(this.field_27967);
     }
 }

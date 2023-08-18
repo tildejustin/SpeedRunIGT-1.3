@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.redlimerl.speedrunigt.timer.category.InvalidCategoryException;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.registry.Registry;
 
@@ -16,7 +16,7 @@ public class ObtainItemCategoryCondition extends CategoryCondition.Condition<Lis
     private final String itemID;
     private final Integer itemDamage;
     private final int itemAmount;
-    private final NbtCompound nbtTag;
+    private final CompoundTag nbtTag;
     private final boolean strictMode;
 
     public ObtainItemCategoryCondition(JsonObject jsonObject) throws InvalidCategoryException {
@@ -31,7 +31,7 @@ public class ObtainItemCategoryCondition extends CategoryCondition.Condition<Lis
                 JsonElement jsonElement = jsonObject.get("item_tag");
                 this.nbtTag = StringNbtReader.parse(jsonElement.getAsString());
             } else {
-                this.nbtTag = new NbtCompound();
+                this.nbtTag = new CompoundTag();
             }
         } catch (Exception e) {
             throw new InvalidCategoryException(InvalidCategoryException.Reason.INVALID_JSON_DATA, "Failed to read condition \"" + this.getName() + "\"");
@@ -46,7 +46,7 @@ public class ObtainItemCategoryCondition extends CategoryCondition.Condition<Lis
             if (itemStack != null && Objects.equals(Registry.ITEM.getId(itemStack.getItem()).toString(), itemID) && (itemDamage == null || itemStack.getDamage() == itemDamage)) {
                 if (!nbtTag.isEmpty()) {
                     if (itemStack.getTag() == null) continue;
-                    NbtCompound itemTag = itemStack.getTag();
+                    CompoundTag itemTag = itemStack.getTag();
                     if (!itemTag.equals(nbtTag)) continue;
                 }
                 amount += itemStack.getCount();

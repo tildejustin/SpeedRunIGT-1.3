@@ -91,6 +91,7 @@ public class RunCategories {
     public static RunCategory ALL_PORTALS = RunCategoryBuilder.create("ALL_PORTALS","mcce#All_Portals", "speedrunigt.option.timer_category.all_portals")
             .setCanSegment(true).build();
     public static RunCategory MINE_A_CHUNK = new RunCategory("MINE_A_CHUNK","mcce#Mine_a_Chunk");
+    public static RunCategory WATER_IN_NETHER = new RunCategory("WATER_IN_NETHER", "mcu#Water_In_the_Nether", "Water in the NetherP");
 
     public static void checkAllBossesCompleted() {
         InGameTimer timer = InGameTimer.getInstance();

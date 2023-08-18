@@ -13,15 +13,15 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -45,10 +45,10 @@ public class SpeedRunCategoryScreen extends Screen {
     @Override
     protected void init() {
         assert client != null;
-        addDrawableChild(new ButtonWidget(width / 2 - 100, height - 35, 200, 20, ScreenTexts.CANCEL, button -> client.openScreen(parent)));
+        addButton(new ButtonWidget(width / 2 - 100, height - 35, 200, 20, ScreenTexts.CANCEL, button -> client.openScreen(parent)));
 
         this.listWidget = new CategorySelectionListWidget(client);
-        addSelectableChild(listWidget);
+        addChild(listWidget);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SpeedRunCategoryScreen extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.listWidget.render(matrices, mouseX, mouseY, delta);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 16, 16777215);
-        drawCenteredText(matrices, this.textRenderer, "(" + I18n.translate("speedrunigt.option.timer_category.warning") + ")", this.width / 2, this.height - 46, 8421504);
+        drawCenteredText(matrices, this.textRenderer, Text.of("(" + I18n.translate("speedrunigt.option.timer_category.warning") + ")"), this.width / 2, this.height - 46, 8421504);
         super.render(matrices, mouseX, mouseY, delta);
     }
 
@@ -80,7 +80,7 @@ public class SpeedRunCategoryScreen extends Screen {
         @Environment(EnvType.CLIENT)
         public class CategoryEntry extends ElementListWidget.Entry<CategoryEntry> {
 
-            private final ArrayList<ClickableWidget> children = new ArrayList<>();
+            private final ArrayList<AbstractButtonWidget> children = new ArrayList<>();
             private final CategoryCheckBoxWidget checkBox;
             private final ButtonWidget urlButton;
 
@@ -102,11 +102,6 @@ public class SpeedRunCategoryScreen extends Screen {
 
             @Override
             public List<? extends Element> children() {
-                return children;
-            }
-
-            @Override
-            public List<? extends Selectable> method_37025() {
                 return children;
             }
 
@@ -133,18 +128,19 @@ public class SpeedRunCategoryScreen extends Screen {
                             : SpeedRunOption.getOption(SpeedRunOptions.TIMER_CATEGORY)) == category;
                 }
 
+                @SuppressWarnings("deprecation")
                 @Override
                 public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
                     MinecraftClient minecraftClient = MinecraftClient.getInstance();
-                    RenderSystem.setShaderTexture(0, TEXTURE);
+                    minecraftClient.getTextureManager().bindTexture(TEXTURE);
                     RenderSystem.enableDepthTest();
                     TextRenderer textRenderer = minecraftClient.textRenderer;
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+                    RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
                     RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
                     drawTexture(matrices, this.x, this.y, this.isFocused() ? 20.0F : 0.0F, this.isChecked() ? 20.0F : 0.0F, 20, this.height, 64, 64);
-                    this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
+                    this.renderBg(matrices, minecraftClient, mouseX, mouseY);
                     drawTextWithShadow(matrices, textRenderer, this.getMessage(), this.x + 24, this.y + (this.height - 8) / 2, 14737632 | MathHelper.ceil(this.alpha * 255.0F) << 24);
                 }
             }

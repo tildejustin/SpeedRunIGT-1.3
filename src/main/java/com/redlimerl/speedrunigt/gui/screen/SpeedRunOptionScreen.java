@@ -5,14 +5,17 @@ import com.redlimerl.speedrunigt.SpeedRunIGT;
 import com.redlimerl.speedrunigt.SpeedRunIGTUpdateChecker;
 import com.redlimerl.speedrunigt.api.OptionButtonFactory;
 import com.redlimerl.speedrunigt.option.SpeedRunOption;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -26,14 +29,14 @@ import java.util.function.Supplier;
 public class SpeedRunOptionScreen extends Screen {
 
     private final Screen parent;
-    private final HashMap<String, ArrayList<ClickableWidget>> categorySubButtons = new HashMap<>();
-    private final LinkedHashMap<String, ClickableWidget> categorySelectButtons = new LinkedHashMap<>();
+    private final HashMap<String, ArrayList<AbstractButtonWidget>> categorySubButtons = new HashMap<>();
+    private final LinkedHashMap<String, AbstractButtonWidget> categorySelectButtons = new LinkedHashMap<>();
     private final HashMap<Element, Supplier<String>> tooltips = new HashMap<>();
     private ButtonScrollListWidget buttonListWidget;
     private String currentSelectCategory = "";
     private int page = 0;
-    private ClickableWidget prevPageButton = null;
-    private ClickableWidget nextPageButton = null;
+    private ButtonWidget prevPageButton = null;
+    private ButtonWidget nextPageButton = null;
 
     public SpeedRunOptionScreen(Screen parent) {
         super(new TranslatableText("speedrunigt.title.options"));
@@ -53,34 +56,34 @@ public class SpeedRunOptionScreen extends Screen {
 
         for (OptionButtonFactory factory : optionButtonFactoryList) {
             OptionButtonFactory.Storage builder = factory.create(this).build();
-            ClickableWidget button = builder.getButtonWidget();
+            AbstractButtonWidget button = builder.getButtonWidget();
             if (builder.getTooltip() != null) tooltips.put(button, builder.getTooltip());
 
             String category = builder.getCategory();
-            ArrayList<ClickableWidget> categoryList = categorySubButtons.getOrDefault(category, new ArrayList<>());
+            ArrayList<AbstractButtonWidget> categoryList = categorySubButtons.getOrDefault(category, new ArrayList<>());
             categoryList.add(button);
             categorySubButtons.put(category, categoryList);
 
             if (!categorySelectButtons.containsKey(category)) {
                 ButtonWidget buttonWidget = new ButtonWidget(width - 110, 30 + ((categoryCount++ % 6) * 22), 80, 20, new TranslatableText(category), (ButtonWidget buttonWidget1) -> selectCategory(category));
                 categorySelectButtons.put(category, buttonWidget);
-                addDrawableChild(buttonWidget);
+                addButton(buttonWidget);
             }
         }
 
-        prevPageButton = addDrawableChild(new ButtonWidget(width - 110, 30 + (6 * 22), 38, 20, new LiteralText("<"), (ButtonWidget button) -> openPage(-1)));
+        prevPageButton = addButton(new ButtonWidget(width - 110, 30 + (6 * 22), 38, 20, new LiteralText("<"), (ButtonWidget button) -> openPage(-1)));
 
-        nextPageButton = addDrawableChild(new ButtonWidget(width - 68, 30 + (6 * 22), 38, 20, new LiteralText(">"), (ButtonWidget button) -> openPage(+1)));
+        nextPageButton = addButton(new ButtonWidget(width - 68, 30 + (6 * 22), 38, 20, new LiteralText(">"), (ButtonWidget button) -> openPage(+1)));
 
         openPage(page);
 
-        addDrawableChild(new ButtonWidget(width - 85, height - 35, 70, 20, ScreenTexts.CANCEL, (ButtonWidget button) -> onClose()));
+        addButton(new ButtonWidget(width - 85, height - 35, 70, 20, ScreenTexts.CANCEL, (ButtonWidget button) -> onClose()));
 
-        addDrawableChild(new ButtonWidget(15, height - 35, 70, 20, new TranslatableText("speedrunigt.menu.donate"), (ButtonWidget button) -> Util.getOperatingSystem().open("https://ko-fi.com/redlimerl")));
+        addButton(new ButtonWidget(15, height - 35, 70, 20, new TranslatableText("speedrunigt.menu.donate"), (ButtonWidget button) -> Util.getOperatingSystem().open("https://ko-fi.com/redlimerl")));
 
-        addDrawableChild(new ButtonWidget(88, height - 35, 140, 20, new TranslatableText("speedrunigt.menu.crowdin"), (ButtonWidget button) -> Util.getOperatingSystem().open("https://crowdin.com/project/speedrunigt")));
+        addButton(new ButtonWidget(88, height - 35, 140, 20, new TranslatableText("speedrunigt.menu.crowdin"), (ButtonWidget button) -> Util.getOperatingSystem().open("https://crowdin.com/project/speedrunigt")));
 
-        buttonListWidget = addSelectableChild(new ButtonScrollListWidget());
+        buttonListWidget = addChild(new ButtonScrollListWidget());
 
         if (!currentSelectCategory.isEmpty()) selectCategory(currentSelectCategory);
         else categorySelectButtons.keySet().stream().findFirst().ifPresent(this::selectCategory);
@@ -91,7 +94,7 @@ public class SpeedRunOptionScreen extends Screen {
         this.page = MathHelper.clamp(this.page + num, 0, maxPage);
 
         int count = 0;
-        for (ClickableWidget value : categorySelectButtons.values()) {
+        for (AbstractButtonWidget value : categorySelectButtons.values()) {
             value.visible = this.page * 6 <= count && (this.page + 1) * 6 > count;
             count++;
         }
@@ -131,7 +134,7 @@ public class SpeedRunOptionScreen extends Screen {
         if (e.isPresent()) {
             Element element = e.get();
             if (element instanceof ButtonScrollListWidget.Entry entry) {
-                ClickableWidget buttonWidget = entry.getButtonWidget();
+                AbstractButtonWidget buttonWidget = entry.getButtonWidget();
                 if (tooltips.containsKey(buttonWidget)) {
                     String text = tooltips.get(buttonWidget).get();
                     for (String s : text.split("\n")) {
@@ -166,9 +169,9 @@ public class SpeedRunOptionScreen extends Screen {
             super(SpeedRunOptionScreen.this.client, SpeedRunOptionScreen.this.width - 140, SpeedRunOptionScreen.this.height, 28, SpeedRunOptionScreen.this.height - 54, 24);
         }
 
-        public void replaceButtons(Collection<ClickableWidget> buttonWidgets) {
+        public void replaceButtons(ArrayList<AbstractButtonWidget> buttonWidgets) {
             ArrayList<Entry> list = new ArrayList<>();
-            for (ClickableWidget buttonWidget : buttonWidgets) {
+            for (AbstractButtonWidget buttonWidget : buttonWidgets) {
                 list.add(new Entry(buttonWidget));
             }
             replaceEntries(list);
@@ -179,6 +182,7 @@ public class SpeedRunOptionScreen extends Screen {
             return 150;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             super.render(matrices, mouseX, mouseY, delta);
@@ -187,9 +191,8 @@ public class SpeedRunOptionScreen extends Screen {
             if (this.client == null) return;
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
-            RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-            RenderSystem.setShaderTexture(0, OPTIONS_BACKGROUND_TEXTURE);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            this.client.getTextureManager().bindTexture(DrawableHelper.OPTIONS_BACKGROUND_TEXTURE);
+            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             float f = 32.0F;
             int emptyWidth = this.width;
             bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
@@ -201,10 +204,10 @@ public class SpeedRunOptionScreen extends Screen {
         }
 
         class Entry extends ElementListWidget.Entry<Entry> {
-            ArrayList<ClickableWidget> children = new ArrayList<>();
-            private final ClickableWidget buttonWidget;
+            ArrayList<AbstractButtonWidget> children = new ArrayList<>();
+            private final AbstractButtonWidget buttonWidget;
 
-            public Entry(ClickableWidget buttonWidget) {
+            public Entry(AbstractButtonWidget buttonWidget) {
                 this.buttonWidget = buttonWidget;
                 this.buttonWidget.x = (ButtonScrollListWidget.this.width - this.buttonWidget.getWidth()) / 2;
                 children.add(this.buttonWidget);
@@ -215,7 +218,7 @@ public class SpeedRunOptionScreen extends Screen {
                 return children;
             }
 
-            public ClickableWidget getButtonWidget() {
+            public AbstractButtonWidget getButtonWidget() {
                 return buttonWidget;
             }
 
@@ -223,11 +226,6 @@ public class SpeedRunOptionScreen extends Screen {
             public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
                 buttonWidget.y = y;
                 buttonWidget.render(matrices, mouseX, mouseY, tickDelta);
-            }
-
-            @Override
-            public List<? extends Selectable> method_37025() {
-                return children;
             }
         }
     }

@@ -26,7 +26,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.SinglePreparationResourceReloader;
+import net.minecraft.resource.SinglePreparationResourceReloadListener;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.math.MathHelper;
@@ -68,7 +68,7 @@ public abstract class MinecraftClientMixin {
     @Shadow @Final private Window window;
     private boolean disconnectCheck = false;
 
-    @Inject(at = @At("HEAD"), method = "createWorld")
+    @Inject(at = @At("HEAD"), method = "method_29607")
     public void onCreate(String worldName, LevelInfo levelInfo, DynamicRegistryManager.Impl registryTracker, GeneratorOptions generatorOptions, CallbackInfo ci) {
         RunCategory category = SpeedRunOption.getOption(SpeedRunOptions.TIMER_CATEGORY);
         if (category.isAutoStart()) {
@@ -227,7 +227,7 @@ public abstract class MinecraftClientMixin {
      */
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/debug/DebugRenderer;<init>(Lnet/minecraft/client/MinecraftClient;)V", shift = At.Shift.BEFORE))
     public void onInit(RunArgs args, CallbackInfo ci) {
-        this.resourceManager.registerReloader(new SinglePreparationResourceReloader<Map<Identifier, List<Font>>>() {
+        this.resourceManager.registerListener(new SinglePreparationResourceReloadListener<Map<Identifier, List<Font>>>() {
             @Override
             protected Map<Identifier, List<Font>> prepare(ResourceManager manager, Profiler profiler) {
                 SpeedRunIGT.FONT_MAPS.clear();

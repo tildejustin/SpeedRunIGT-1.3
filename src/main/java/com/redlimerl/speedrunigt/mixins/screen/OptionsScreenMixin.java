@@ -34,7 +34,7 @@ public class OptionsScreenMixin extends Screen {
                 this.client.openScreen(new SpeedRunOptionScreen(this));
             }
         });
-        this.addDrawableChild(timerButton);
+        this.addButton(timerButton);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
@@ -42,7 +42,7 @@ public class OptionsScreenMixin extends Screen {
         if (this.client != null) {
             matrices.push();
             matrices.translate(-.5f, -.5f, 0);
-            RenderSystem.setShaderTexture(0, timerButton.isHovered() ? ENDER_EYE :
+            this.client.getTextureManager().bindTexture(timerButton.isHovered() ? ENDER_EYE :
                     SpeedRunIGTUpdateChecker.UPDATE_STATUS == SpeedRunIGTUpdateChecker.UpdateStatus.OUTDATED ? BLAZE_POWDER : ENDER_PEARL);
             drawTexture(matrices, timerButton.x + 2, timerButton.y + 2, 0.0F, 0.0F, 16, 16, 16, 16);
             matrices.pop();

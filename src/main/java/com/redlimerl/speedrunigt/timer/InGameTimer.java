@@ -74,7 +74,7 @@ public class InGameTimer implements Serializable {
 
     String worldName;
     final UUID uuid = UUID.randomUUID();
-    private String category = RunCategories.ANY.getID();
+    private String category = RunCategories.WATER_IN_NETHER.getID();
     private final boolean isResettable;
     private boolean isCompleted = false;
     boolean isServerIntegrated = true;

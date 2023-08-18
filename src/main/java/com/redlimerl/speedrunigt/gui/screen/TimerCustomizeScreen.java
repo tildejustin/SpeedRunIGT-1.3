@@ -13,8 +13,8 @@ import com.redlimerl.speedrunigt.timer.TimerDrawer.PositionType;
 import net.minecraft.client.gui.hud.BackgroundHelper.ColorMixer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
@@ -38,13 +38,13 @@ public class TimerCustomizeScreen extends Screen {
 
     private boolean changed = false;
     private boolean hide = false;
-    private final ArrayList<ClickableWidget> tabButtons = new ArrayList<>();
-    private final ArrayList<ClickableWidget> normalOptions = new ArrayList<>();
-    private final ArrayList<ClickableWidget> igtOptions = new ArrayList<>();
-    private final ArrayList<ClickableWidget> rtaOptions = new ArrayList<>();
-    private final ArrayList<ClickableWidget> posOptions = new ArrayList<>();
-    private final ArrayList<ClickableWidget> fontOptions = new ArrayList<>();
-    private final ArrayList<ClickableWidget> backgroundOptions = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> tabButtons = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> normalOptions = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> igtOptions = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> rtaOptions = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> posOptions = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> fontOptions = new ArrayList<>();
+    private final ArrayList<AbstractButtonWidget> backgroundOptions = new ArrayList<>();
     private ButtonWidget normalButton;
     private ButtonWidget igtButton;
     private ButtonWidget rtaButton;
@@ -76,22 +76,22 @@ public class TimerCustomizeScreen extends Screen {
         this.backgroundButton.active = tab != 4;
 
         if (hide) return;
-        for (ClickableWidget normalOption : normalOptions) {
+        for (AbstractButtonWidget normalOption : normalOptions) {
             normalOption.visible = tab == 0;
         }
-        for (ClickableWidget igtOption : igtOptions) {
+        for (AbstractButtonWidget igtOption : igtOptions) {
             igtOption.visible = tab == 1;
         }
-        for (ClickableWidget rtaOption : rtaOptions) {
+        for (AbstractButtonWidget rtaOption : rtaOptions) {
             rtaOption.visible = tab == 2;
         }
-        for (ClickableWidget fontOption : fontOptions) {
+        for (AbstractButtonWidget fontOption : fontOptions) {
             fontOption.visible = tab == 3;
         }
-        for (ClickableWidget backgroundOption : backgroundOptions) {
+        for (AbstractButtonWidget backgroundOption : backgroundOptions) {
             backgroundOption.visible = tab == 4;
         }
-        for (ClickableWidget posOption : posOptions) {
+        for (AbstractButtonWidget posOption : posOptions) {
             posOption.visible = tab == 5;
         }
 
@@ -125,56 +125,56 @@ public class TimerCustomizeScreen extends Screen {
         initFontButtons();
         initBackgroundButtons();
 
-        this.normalButton = addDrawableChild(new ButtonWidget(width / 2 - 179, height / 2 - 48, 58, 20, new TranslatableText("options.title").append("..."), (ButtonWidget button) -> openTab(0)));
+        this.normalButton = addButton(new ButtonWidget(width / 2 - 179, height / 2 - 48, 58, 20, new TranslatableText("options.title").append("..."), (ButtonWidget button) -> openTab(0)));
         this.tabButtons.add(this.normalButton);
 
-        this.igtButton = addDrawableChild(new ButtonWidget(width / 2 - 119, height / 2 - 48, 58, 20, new LiteralText("IGT..."), (ButtonWidget button) -> openTab(1)));
+        this.igtButton = addButton(new ButtonWidget(width / 2 - 119, height / 2 - 48, 58, 20, new LiteralText("IGT..."), (ButtonWidget button) -> openTab(1)));
         this.tabButtons.add(this.igtButton);
 
-        this.rtaButton = addDrawableChild(new ButtonWidget(width / 2 - 59, height / 2 - 48, 58, 20, new LiteralText("RTA..."), (ButtonWidget button) -> openTab(2)));
+        this.rtaButton = addButton(new ButtonWidget(width / 2 - 59, height / 2 - 48, 58, 20, new LiteralText("RTA..."), (ButtonWidget button) -> openTab(2)));
         this.tabButtons.add(this.rtaButton);
 
-        this.posButton = addDrawableChild(new ButtonWidget(width / 2 + 1, height / 2 - 48, 58, 20, new LiteralText("Pos..."), (ButtonWidget button) -> openTab(5)));
+        this.posButton = addButton(new ButtonWidget(width / 2 + 1, height / 2 - 48, 58, 20, new LiteralText("Pos..."), (ButtonWidget button) -> openTab(5)));
         this.tabButtons.add(this.posButton);
 
-        this.fontButton = addDrawableChild(new ButtonWidget(width / 2 + 61, height / 2 - 48, 58, 20, new TranslatableText("speedrunigt.title.font"), (ButtonWidget button) -> {
+        this.fontButton = addButton(new ButtonWidget(width / 2 + 61, height / 2 - 48, 58, 20, new TranslatableText("speedrunigt.title.font"), (ButtonWidget button) -> {
             openTab(3);
             openFontPage();
         }));
         this.tabButtons.add(this.fontButton);
 
-        this.backgroundButton = addDrawableChild(new ButtonWidget(width / 2 + 121, height / 2 - 48, 58, 20, new TranslatableText("speedrunigt.title.background"), (ButtonWidget button) -> openTab(4)));
+        this.backgroundButton = addButton(new ButtonWidget(width / 2 + 121, height / 2 - 48, 58, 20, new TranslatableText("speedrunigt.title.background"), (ButtonWidget button) -> openTab(4)));
         this.tabButtons.add(this.backgroundButton);
 
 
-        addDrawableChild(new ButtonWidget(width / 2 - 89, height / 2 + 62, 58, 20, new TranslatableText("speedrunigt.option.hide"), (ButtonWidget button) -> {
+        addButton(new ButtonWidget(width / 2 - 89, height / 2 + 62, 58, 20, new TranslatableText("speedrunigt.option.hide"), (ButtonWidget button) -> {
             hide = !hide;
-            for (ClickableWidget normalOption : normalOptions) {
+            for (AbstractButtonWidget normalOption : normalOptions) {
                 normalOption.visible = !hide && currentTab == 0;
             }
-            for (ClickableWidget igtOption : igtOptions) {
+            for (AbstractButtonWidget igtOption : igtOptions) {
                 igtOption.visible = !hide && currentTab == 1;
             }
-            for (ClickableWidget rtaOption : rtaOptions) {
+            for (AbstractButtonWidget rtaOption : rtaOptions) {
                 rtaOption.visible = !hide && currentTab == 2;
             }
-            for (ClickableWidget posOption : posOptions) {
+            for (AbstractButtonWidget posOption : posOptions) {
                 posOption.visible = !hide && currentTab == 5;
             }
-            for (ClickableWidget fontOption : fontOptions) {
+            for (AbstractButtonWidget fontOption : fontOptions) {
                 fontOption.visible = !hide && currentTab == 3;
             }
-            for (ClickableWidget backgroundOption : backgroundOptions) {
+            for (AbstractButtonWidget backgroundOption : backgroundOptions) {
                 backgroundOption.visible = !hide && currentTab == 4;
             }
-            for (ClickableWidget tabButton : tabButtons) {
+            for (AbstractButtonWidget tabButton : tabButtons) {
                 tabButton.visible = !hide;
             }
             openTab(currentTab);
             button.setMessage(new TranslatableText("speedrunigt.option." + (!hide ? "hide" : "show")));
         }));
 
-        this.saveButton = addDrawableChild(new ButtonWidget(width / 2 - 29, height / 2 + 62, 58, 20, new TranslatableText("selectWorld.edit.save"), (ButtonWidget button) -> {
+        this.saveButton = addButton(new ButtonWidget(width / 2 - 29, height / 2 + 62, 58, 20, new TranslatableText("selectWorld.edit.save"), (ButtonWidget button) -> {
             SpeedRunOption.setOption(SpeedRunOptions.TIMER_IGT_SCALE, drawer.getIGTScale());
             SpeedRunIGTClient.TIMER_DRAWER.setIGTScale(drawer.getIGTScale());
             SpeedRunOption.setOption(SpeedRunOptions.TIMER_IGT_COLOR, drawer.getIGTColor());
@@ -230,7 +230,7 @@ public class TimerCustomizeScreen extends Screen {
             changed = false;
         }));
 
-        addDrawableChild(new ButtonWidget(width / 2 + 31, height / 2 + 62, 58, 20, ScreenTexts.CANCEL, (ButtonWidget button) -> {
+        addButton(new ButtonWidget(width / 2 + 31, height / 2 + 62, 58, 20, ScreenTexts.CANCEL, (ButtonWidget button) -> {
             if (client != null) client.openScreen(parent);
         }));
 
@@ -362,7 +362,7 @@ public class TimerCustomizeScreen extends Screen {
 
     public void initNormal() {
         normalOptions.add(
-                addDrawableChild(new ButtonWidget(width / 2 - 80, height / 2 - 16, 160, 20, new TranslatableText("speedrunigt.option.timer_position.show_time_only").append(" : ").append(drawer.isSimplyTimer() ? ScreenTexts.ON : ScreenTexts.OFF), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 - 80, height / 2 - 16, 160, 20, new TranslatableText("speedrunigt.option.timer_position.show_time_only").append(" : ").append(drawer.isSimplyTimer() ? ScreenTexts.ON : ScreenTexts.OFF), (ButtonWidget button) -> {
                     drawer.setSimplyTimer(!drawer.isSimplyTimer());
                     changed = true;
                     button.setMessage(new TranslatableText("speedrunigt.option.timer_position.show_time_only").append(" : ").append(drawer.isSimplyTimer() ? ScreenTexts.ON : ScreenTexts.OFF));
@@ -370,7 +370,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         normalOptions.add(
-                addDrawableChild(new ButtonWidget(width / 2 - 80, height / 2 + 6, 160, 20, new TranslatableText("speedrunigt.option.timer_position.lock_timer_position").append(" : ").append(drawer.isLocked() ? ScreenTexts.ON : ScreenTexts.OFF), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 - 80, height / 2 + 6, 160, 20, new TranslatableText("speedrunigt.option.timer_position.lock_timer_position").append(" : ").append(drawer.isLocked() ? ScreenTexts.ON : ScreenTexts.OFF), (ButtonWidget button) -> {
                     drawer.setLocked(!drawer.isLocked());
                     changed = true;
                     button.setMessage(new TranslatableText("speedrunigt.option.timer_position.lock_timer_position").append(" : ").append(drawer.isLocked() ? ScreenTexts.ON : ScreenTexts.OFF));
@@ -378,7 +378,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         normalOptions.add(
-                addDrawableChild(new ButtonWidget(width / 2 - 80, height / 2 + 28, 160, 20, new TranslatableText("speedrunigt.option.timer_position.show_decimals").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.show_decimals.context", drawer.getTimerDecimals().getNumber())), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 - 80, height / 2 + 28, 160, 20, new TranslatableText("speedrunigt.option.timer_position.show_decimals").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.show_decimals.context", drawer.getTimerDecimals().getNumber())), (ButtonWidget button) -> {
                     int order = drawer.getTimerDecimals().ordinal();
                     drawer.setTimerDecimals(TimerDecimals.values()[(++order) % TimerDecimals.values().length]);
                     changed = true;
@@ -389,7 +389,7 @@ public class TimerCustomizeScreen extends Screen {
 
     public void initIGTButtons() {
         igtOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 127, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_red", "IGT").append(" : ").append(String.valueOf(ColorMixer.getRed(drawer.getIGTColor()))), ColorMixer.getRed(drawer.getIGTColor()) / 255.0f) {
+                addButton(new SliderWidget(width / 2 - 127, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_red", "IGT").append(" : ").append(String.valueOf(ColorMixer.getRed(drawer.getIGTColor()))), ColorMixer.getRed(drawer.getIGTColor()) / 255.0f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.color_red", "IGT").append(" : ").append(String.valueOf(ColorMixer.getRed(drawer.getIGTColor()))));
@@ -412,7 +412,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         igtOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 127, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_green", "IGT").append(" : ").append(String.valueOf(ColorMixer.getGreen(drawer.getIGTColor()))), ColorMixer.getGreen(drawer.getIGTColor()) / 255.0f) {
+                addButton(new SliderWidget(width / 2 - 127, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_green", "IGT").append(" : ").append(String.valueOf(ColorMixer.getGreen(drawer.getIGTColor()))), ColorMixer.getGreen(drawer.getIGTColor()) / 255.0f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.color_green", "IGT").append(" : ").append(String.valueOf(ColorMixer.getGreen(drawer.getIGTColor()))));
@@ -435,7 +435,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         igtOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 127, height / 2 + 28, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_blue", "IGT").append(" : ").append(String.valueOf(ColorMixer.getBlue(drawer.getIGTColor()))), ColorMixer.getBlue(drawer.getIGTColor()) / 255.0f) {
+                addButton(new SliderWidget(width / 2 - 127, height / 2 + 28, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_blue", "IGT").append(" : ").append(String.valueOf(ColorMixer.getBlue(drawer.getIGTColor()))), ColorMixer.getBlue(drawer.getIGTColor()) / 255.0f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.color_blue", "IGT").append(" : ").append(String.valueOf(ColorMixer.getBlue(drawer.getIGTColor()))));
@@ -458,7 +458,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         igtOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 + 6, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.scale", "IGT").append(" : ").append((Math.round(drawer.getIGTScale() * 100)) + "%"), drawer.getIGTScale() / 3f) {
+                addButton(new SliderWidget(width / 2 + 6, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.scale", "IGT").append(" : ").append((Math.round(drawer.getIGTScale() * 100)) + "%"), drawer.getIGTScale() / 3f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.scale", "IGT").append(" : ").append((Math.round(drawer.getIGTScale() * 100)) + "%"));
@@ -473,7 +473,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         igtOptions.add(
-                addDrawableChild(new ButtonWidget(width / 2 + 6, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.text_decorate", "IGT").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.text_decorate." + drawer.getIGTDecoration().name().toLowerCase(Locale.ROOT))), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 + 6, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.text_decorate", "IGT").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.text_decorate." + drawer.getIGTDecoration().name().toLowerCase(Locale.ROOT))), (ButtonWidget button) -> {
                     int order = drawer.getIGTDecoration().ordinal();
                     drawer.setIGTDecoration(TimerDecoration.values()[(++order) % TimerDecoration.values().length]);
                     changed = true;
@@ -484,7 +484,7 @@ public class TimerCustomizeScreen extends Screen {
 
     public void initRTAButtons() {
         rtaOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 127, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_red", "RTA").append(" : ").append(String.valueOf(ColorMixer.getRed(drawer.getRTAColor()))), ColorMixer.getRed(drawer.getRTAColor()) / 255.0f) {
+                addButton(new SliderWidget(width / 2 - 127, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_red", "RTA").append(" : ").append(String.valueOf(ColorMixer.getRed(drawer.getRTAColor()))), ColorMixer.getRed(drawer.getRTAColor()) / 255.0f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.color_red", "RTA").append(" : ").append(String.valueOf(ColorMixer.getRed(drawer.getRTAColor()))));
@@ -507,7 +507,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         rtaOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 127, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_green", "RTA").append(" : ").append(String.valueOf(ColorMixer.getGreen(drawer.getRTAColor()))), ColorMixer.getGreen(drawer.getRTAColor()) / 255.0f) {
+                addButton(new SliderWidget(width / 2 - 127, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_green", "RTA").append(" : ").append(String.valueOf(ColorMixer.getGreen(drawer.getRTAColor()))), ColorMixer.getGreen(drawer.getRTAColor()) / 255.0f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.color_green", "RTA").append(" : ").append(String.valueOf(ColorMixer.getGreen(drawer.getRTAColor()))));
@@ -530,7 +530,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         rtaOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 127, height / 2 + 28, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_blue", "RTA").append(" : ").append(String.valueOf(ColorMixer.getBlue(drawer.getRTAColor()))), ColorMixer.getBlue(drawer.getRTAColor()) / 255.0f) {
+                addButton(new SliderWidget(width / 2 - 127, height / 2 + 28, 120, 20, new TranslatableText("speedrunigt.option.timer_position.color_blue", "RTA").append(" : ").append(String.valueOf(ColorMixer.getBlue(drawer.getRTAColor()))), ColorMixer.getBlue(drawer.getRTAColor()) / 255.0f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.color_blue", "RTA").append(" : ").append(String.valueOf(ColorMixer.getBlue(drawer.getRTAColor()))));
@@ -553,7 +553,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         rtaOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 + 6, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.scale", "RTA").append(" : ").append((Math.round(drawer.getRTAScale() * 100)) + "%"), drawer.getRTAScale() / 3f) {
+                addButton(new SliderWidget(width / 2 + 6, height / 2 - 16, 120, 20, new TranslatableText("speedrunigt.option.timer_position.scale", "RTA").append(" : ").append((Math.round(drawer.getRTAScale() * 100)) + "%"), drawer.getRTAScale() / 3f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.scale", "RTA").append(" : ").append((Math.round(drawer.getRTAScale() * 100)) + "%"));
@@ -568,7 +568,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         rtaOptions.add(
-                addDrawableChild(new ButtonWidget(width / 2 + 6, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.text_decorate", "RTA").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.text_decorate." + drawer.getRTADecoration().name().toLowerCase(Locale.ROOT))), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 + 6, height / 2 + 6, 120, 20, new TranslatableText("speedrunigt.option.timer_position.text_decorate", "RTA").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.text_decorate." + drawer.getRTADecoration().name().toLowerCase(Locale.ROOT))), (ButtonWidget button) -> {
                     int order = drawer.getRTADecoration().ordinal();
                     drawer.setRTADecoration(TimerDecoration.values()[(++order) % TimerDecoration.values().length]);
                     changed = true;
@@ -578,7 +578,7 @@ public class TimerCustomizeScreen extends Screen {
     }
 
     public void initPositionButtons() {
-        ButtonWidget posTypeButton = addDrawableChild(new ButtonWidget(width / 2 - 80, height / 2 + 6, 160, 20, new TranslatableText("speedrunigt.option.timer_position.split_position_type").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.split_position_type."+currentPosType.name().toLowerCase(Locale.ROOT))), (button) -> {
+        ButtonWidget posTypeButton = addButton(new ButtonWidget(width / 2 - 80, height / 2 + 6, 160, 20, new TranslatableText("speedrunigt.option.timer_position.split_position_type").append(" : ").append(new TranslatableText("speedrunigt.option.timer_position.split_position_type."+currentPosType.name().toLowerCase(Locale.ROOT))), (button) -> {
             int order = (currentPosType.ordinal() + 1) % PositionType.values().length;
             currentPosType = PositionType.values()[order];
             changed = true;
@@ -588,7 +588,7 @@ public class TimerCustomizeScreen extends Screen {
         posTypeButton.active = splitPosition;
 
         posOptions.add(
-                addDrawableChild(new ButtonWidget(width / 2 - 80, height / 2 - 16, 160, 20, new TranslatableText("speedrunigt.option.timer_position.split_position").append(" : ").append(splitPosition ? ScreenTexts.ON : ScreenTexts.OFF), (button) -> {
+                addButton(new ButtonWidget(width / 2 - 80, height / 2 - 16, 160, 20, new TranslatableText("speedrunigt.option.timer_position.split_position").append(" : ").append(splitPosition ? ScreenTexts.ON : ScreenTexts.OFF), (button) -> {
                     splitPosition = !splitPosition;
                     changed = true;
                     posTypeButton.active = splitPosition;
@@ -605,12 +605,12 @@ public class TimerCustomizeScreen extends Screen {
     }
 
     public void initFontButtons() {
-        ButtonWidget prevButton = addDrawableChild(new ButtonWidget(width / 2 - 180, height / 2 + 6, 20, 20, new LiteralText("<"), (ButtonWidget button) -> {
+        ButtonWidget prevButton = addButton(new ButtonWidget(width / 2 - 180, height / 2 + 6, 20, 20, new LiteralText("<"), (ButtonWidget button) -> {
             fontPage--;
             openFontPage();
         }));
 
-        ButtonWidget nextButton = addDrawableChild(new ButtonWidget(width / 2 + 180, height / 2 + 6, 20, 20, new LiteralText(">"), (ButtonWidget button) -> {
+        ButtonWidget nextButton = addButton(new ButtonWidget(width / 2 + 180, height / 2 + 6, 20, 20, new LiteralText(">"), (ButtonWidget button) -> {
             fontPage++;
             openFontPage();
         }));
@@ -618,7 +618,7 @@ public class TimerCustomizeScreen extends Screen {
         fontOptions.add(nextButton);
 
         fontSelectButtons.add(
-                addDrawableChild(new ButtonWidget(width / 2 + 35, height / 2 - 16, 50, 20, new TranslatableText("speedrunigt.option.select"), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 + 35, height / 2 - 16, 50, 20, new TranslatableText("speedrunigt.option.select"), (ButtonWidget button) -> {
                     int c = (fontPage * 3);
                     if (availableFonts.size() > c) {
                         for (ButtonWidget fontSelectButton : fontSelectButtons) fontSelectButton.active = true;
@@ -630,7 +630,7 @@ public class TimerCustomizeScreen extends Screen {
                 }))
         );
         fontSelectButtons.add(
-                addDrawableChild(new ButtonWidget(width / 2 + 35, height / 2 + 6, 50, 20, new TranslatableText("speedrunigt.option.select"), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 + 35, height / 2 + 6, 50, 20, new TranslatableText("speedrunigt.option.select"), (ButtonWidget button) -> {
                     int c = (fontPage * 3) + 1;
                     if (availableFonts.size() > c) {
                         for (ButtonWidget fontSelectButton : fontSelectButtons) fontSelectButton.active = true;
@@ -642,7 +642,7 @@ public class TimerCustomizeScreen extends Screen {
                 }))
         );
         fontSelectButtons.add(
-                addDrawableChild(new ButtonWidget(width / 2 + 35, height / 2 + 28, 50, 20, new TranslatableText("speedrunigt.option.select"), (ButtonWidget button) -> {
+                addButton(new ButtonWidget(width / 2 + 35, height / 2 + 28, 50, 20, new TranslatableText("speedrunigt.option.select"), (ButtonWidget button) -> {
                     int c = (fontPage * 3) + 2;
                     if (availableFonts.size() > c) {
                         for (ButtonWidget fontSelectButton : fontSelectButtons) fontSelectButton.active = true;
@@ -653,7 +653,7 @@ public class TimerCustomizeScreen extends Screen {
                     }
                 }))
         );
-        for (ClickableWidget fontOption : fontOptions) {
+        for (AbstractButtonWidget fontOption : fontOptions) {
             fontOption.visible = false;
         }
         for (ButtonWidget fontSelectButton : fontSelectButtons) {
@@ -662,11 +662,11 @@ public class TimerCustomizeScreen extends Screen {
         fontOptions.addAll(fontSelectButtons);
 
 
-        fontConfigButton = addDrawableChild(new ButtonWidget(width / 2 + 88, 0, 50, 20, new LiteralText("Config"), (ButtonWidget button) -> {
+        fontConfigButton = addButton(new ButtonWidget(width / 2 + 88, 0, 50, 20, new LiteralText("Config"), (ButtonWidget button) -> {
             if (client != null) client.openScreen(new FontConfigScreen(this, drawer.getTimerFont()));
         } ));
-        fontOptions.add(addDrawableChild(new ButtonWidget(width / 2 - 154, height / 2 - 80, 150, 20, new TranslatableText("speedrunigt.option.timer_position.font.open_folder"), (ButtonWidget button) -> Util.getOperatingSystem().open(SpeedRunIGT.FONT_PATH.toFile()))));
-        fontOptions.add(addDrawableChild(new ButtonWidget(width / 2 + 4, height / 2 - 80, 150, 20, new TranslatableText("speedrunigt.option.timer_position.font.description"), (ButtonWidget button) -> Util.getOperatingSystem().open("https://youtu.be/agBbiTQWj78"))));
+        fontOptions.add(addButton(new ButtonWidget(width / 2 - 154, height / 2 - 80, 150, 20, new TranslatableText("speedrunigt.option.timer_position.font.open_folder"), (ButtonWidget button) -> Util.getOperatingSystem().open(SpeedRunIGT.FONT_PATH.toFile()))));
+        fontOptions.add(addButton(new ButtonWidget(width / 2 + 4, height / 2 - 80, 150, 20, new TranslatableText("speedrunigt.option.timer_position.font.description"), (ButtonWidget button) -> Util.getOperatingSystem().open("https://youtu.be/agBbiTQWj78"))));
         openFontPage();
     }
 
@@ -693,7 +693,7 @@ public class TimerCustomizeScreen extends Screen {
 
     public void initBackgroundButtons() {
         backgroundOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 80, height / 2 - 16, 160, 20, new TranslatableText("speedrunigt.option.timer_position.background_opacity").append(" : ").append((int) (drawer.getBGOpacity()*100) + "%"), drawer.getBGOpacity()) {
+                addButton(new SliderWidget(width / 2 - 80, height / 2 - 16, 160, 20, new TranslatableText("speedrunigt.option.timer_position.background_opacity").append(" : ").append((int) (drawer.getBGOpacity()*100) + "%"), drawer.getBGOpacity()) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.background_opacity").append(" : ").append((int) (drawer.getBGOpacity()*100) + "%"));
@@ -708,7 +708,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         backgroundOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 80, height / 2 + 6, 160, 20, new TranslatableText("speedrunigt.option.timer_position.background_padding", "RTA").append(" : ").append(String.valueOf(drawer.getRTAPadding())), (drawer.getRTAPadding()-1) / 24f) {
+                addButton(new SliderWidget(width / 2 - 80, height / 2 + 6, 160, 20, new TranslatableText("speedrunigt.option.timer_position.background_padding", "RTA").append(" : ").append(String.valueOf(drawer.getRTAPadding())), (drawer.getRTAPadding()-1) / 24f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.background_padding", "RTA").append(" : ").append(String.valueOf(drawer.getRTAPadding())));
@@ -723,7 +723,7 @@ public class TimerCustomizeScreen extends Screen {
         );
 
         backgroundOptions.add(
-                addDrawableChild(new SliderWidget(width / 2 - 80, height / 2 + 28, 160, 20, new TranslatableText("speedrunigt.option.timer_position.background_padding", "IGT").append(" : ").append(String.valueOf(drawer.getIGTPadding())), (drawer.getIGTPadding()-1) / 24f) {
+                addButton(new SliderWidget(width / 2 - 80, height / 2 + 28, 160, 20, new TranslatableText("speedrunigt.option.timer_position.background_padding", "IGT").append(" : ").append(String.valueOf(drawer.getIGTPadding())), (drawer.getIGTPadding()-1) / 24f) {
                     @Override
                     protected void updateMessage() {
                         this.setMessage(new TranslatableText("speedrunigt.option.timer_position.background_padding", "IGT").append(" : ").append(String.valueOf(drawer.getIGTPadding())));

@@ -55,7 +55,7 @@ public class InGameTimerClientUtils {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (server != null && player != null) {
             ServerStatHandler statHandler = server.getPlayerManager().createStatHandler(player);
-            return statHandler == null ? null : statHandler.getStat(Stats.CUSTOM.getOrCreateStat(Stats.PLAY_TIME)) * 50L;
+            return statHandler == null ? null : statHandler.getStat(Stats.CUSTOM.getOrCreateStat(Stats.PLAY_ONE_MINUTE)) * 50L;
         }
         return null;
     }

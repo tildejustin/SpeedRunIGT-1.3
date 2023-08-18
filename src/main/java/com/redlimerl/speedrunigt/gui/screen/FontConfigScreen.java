@@ -10,6 +10,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -35,13 +36,13 @@ public class FontConfigScreen extends Screen {
     protected void init() {
         assert client != null;
 
-        addDrawableChild(new ButtonWidget(width / 2 - 21, height / 2 - 45, 20, 20, new LiteralText("-"), button -> newFontConfigure.size = MathHelper.clamp(newFontConfigure.size - 1, 1, 50)));
-        addDrawableChild(new ButtonWidget(width / 2 + 1, height / 2 - 45, 20, 20, new LiteralText("+"), button -> newFontConfigure.size = MathHelper.clamp(newFontConfigure.size + 1, 1, 50)));
+        addButton(new ButtonWidget(width / 2 - 21, height / 2 - 45, 20, 20, new LiteralText("-"), button -> newFontConfigure.size = MathHelper.clamp(newFontConfigure.size - 1, 1, 50)));
+        addButton(new ButtonWidget(width / 2 + 1, height / 2 - 45, 20, 20, new LiteralText("+"), button -> newFontConfigure.size = MathHelper.clamp(newFontConfigure.size + 1, 1, 50)));
 
-        addDrawableChild(new ButtonWidget(width / 2 - 21, height / 2 + 5, 20, 20, new LiteralText("-"), button -> newFontConfigure.oversample = MathHelper.clamp(Math.round((newFontConfigure.oversample - (Screen.hasShiftDown() ? 1f : 0.1f)) * 10) / 10f, 0.1f, 20f)));
-        addDrawableChild(new ButtonWidget(width / 2 + 1, height / 2 + 5, 20, 20, new LiteralText("+"), button -> newFontConfigure.oversample = MathHelper.clamp(Math.round((newFontConfigure.oversample + (Screen.hasShiftDown() ? 1f : 0.1f)) * 10) / 10f, 0.1f, 20f)));
+        addButton(new ButtonWidget(width / 2 - 21, height / 2 + 5, 20, 20, new LiteralText("-"), button -> newFontConfigure.oversample = MathHelper.clamp(Math.round((newFontConfigure.oversample - (Screen.hasShiftDown() ? 1f : 0.1f)) * 10) / 10f, 0.1f, 20f)));
+        addButton(new ButtonWidget(width / 2 + 1, height / 2 + 5, 20, 20, new LiteralText("+"), button -> newFontConfigure.oversample = MathHelper.clamp(Math.round((newFontConfigure.oversample + (Screen.hasShiftDown() ? 1f : 0.1f)) * 10) / 10f, 0.1f, 20f)));
 
-        addDrawableChild(new ButtonWidget(width / 2 - 50, height - 62, 100, 20, new TranslatableText("speedrunigt.font.apply_and_save"), button -> {
+        addButton(new ButtonWidget(width / 2 - 50, height - 62, 100, 20, new TranslatableText("speedrunigt.font.apply_and_save"), button -> {
             File config = SpeedRunIGT.FONT_PATH.resolve(fontIdentifier.getFile().getName().substring(0, fontIdentifier.getFile().getName().length() - 4) + ".json").toFile();
             try {
                 FileUtils.writeStringToFile(config, newFontConfigure.toString(), StandardCharsets.UTF_8);
@@ -51,7 +52,7 @@ public class FontConfigScreen extends Screen {
             }
         }));
 
-        addDrawableChild(new ButtonWidget(width / 2 - 50, height - 40, 100, 20, ScreenTexts.CANCEL, button -> this.onClose()));
+        addButton(new ButtonWidget(width / 2 - 50, height - 40, 100, 20, ScreenTexts.CANCEL, button -> this.onClose()));
     }
 
     @Override
@@ -65,9 +66,9 @@ public class FontConfigScreen extends Screen {
 
         drawCenteredText(matrices, textRenderer, new LiteralText("IGT: 01:23.456").setStyle(Style.EMPTY.withFont(fontIdentifier.getIdentifier())), width / 2, 30, 16777215);
 
-        drawCenteredText(matrices, textRenderer, "§l" + I18n.translate("speedrunigt.font.size") + ": " + ((int) newFontConfigure.size), width / 2, height / 2 - 55, 16777215);
-        drawCenteredText(matrices, textRenderer, "§l" + I18n.translate("speedrunigt.font.oversample") + ": " + newFontConfigure.oversample, width / 2, height / 2 - 5, 16777215);
-        drawCenteredText(matrices, textRenderer, I18n.translate("speedrunigt.font.oversample.description"), width / 2, height / 2 + 27, 16777215);
+        drawCenteredText(matrices, textRenderer, Text.of("§l" + I18n.translate("speedrunigt.font.size") + ": " + ((int) newFontConfigure.size)), width / 2, height / 2 - 55, 16777215);
+        drawCenteredText(matrices, textRenderer, Text.of("§l" + I18n.translate("speedrunigt.font.oversample") + ": " + newFontConfigure.oversample), width / 2, height / 2 - 5, 16777215);
+        drawCenteredText(matrices, textRenderer, Text.of(I18n.translate("speedrunigt.font.oversample.description")), width / 2, height / 2 + 27, 16777215);
 
         super.render(matrices, mouseX, mouseY, delta);
     }

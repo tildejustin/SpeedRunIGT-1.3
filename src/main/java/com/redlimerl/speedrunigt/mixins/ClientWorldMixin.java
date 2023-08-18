@@ -14,6 +14,7 @@ import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,7 +39,7 @@ public abstract class ClientWorldMixin extends World {
         if (timer.getCategory() == RunCategories.MINE_A_CHUNK) {
             ChunkPos chunkPos = getChunk(pos).getPos();
             for (int x = chunkPos.getStartX(); x < chunkPos.getEndX() + 1; x++) {
-                for (int y = getBedrockMaxHeight(); y < getHeight(); y++) {
+                for (int y = getBedrockMaxHeight(); y < getDimension().getHeight(); y++) {
                     for (int z = chunkPos.getStartZ(); z < chunkPos.getEndZ() + 1; z++) {
                         BlockState blockState = getBlockState(new BlockPos(x, y, z));
                         Block block = blockState.getBlock();
@@ -50,9 +51,15 @@ public abstract class ClientWorldMixin extends World {
             }
             InGameTimer.complete();
         }
+        if (timer.getCategory() == RunCategories.WATER_IN_NETHER) {
+            if (this.getDimension().isUltrawarm() && oldState.getBlock() == Blocks.LAVA && newState.getBlock() == Blocks.GLOW_LICHEN) {
+                InGameTimer.complete();
+            }
+        }
     }
 
+    @Unique
     private int getBedrockMaxHeight() {
-        return getBottomY() + 5;
+        return 5;
     }
 }

@@ -20,7 +20,7 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.collection.DefaultedList;
@@ -254,11 +254,11 @@ public class InGameTimerUtils {
         if (!(itemStack.getItem() instanceof BlockItem) || !(((BlockItem) itemStack.getItem()).getBlock() instanceof ShulkerBoxBlock))
             return 0;
 
-        NbtCompound compoundTag = itemStack.getSubTag("BlockEntityTag");
+        CompoundTag compoundTag = itemStack.getSubTag("BlockEntityTag");
         if (compoundTag != null) {
             if (compoundTag.contains("Items", 9)) {
                 DefaultedList<ItemStack> defaultedList = DefaultedList.ofSize(27, ItemStack.EMPTY);
-                Inventories.readNbt(compoundTag, defaultedList);
+                Inventories.toTag(compoundTag, defaultedList);
                 for (ItemStack stack : defaultedList) {
                     if (stack != null && stack.getItem() == targetItem) {
                         count += stack.getCount();

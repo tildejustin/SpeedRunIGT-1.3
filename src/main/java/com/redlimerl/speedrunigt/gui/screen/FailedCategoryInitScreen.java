@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
 import java.util.Locale;
@@ -29,7 +30,7 @@ public class FailedCategoryInitScreen extends Screen {
 
     @Override
     protected void init() {
-        addDrawableChild(new ButtonWidget(width / 2 - 100, height / 2 + 15, 200, 20, ScreenTexts.DONE, button -> onClose()));
+        addButton(new ButtonWidget(width / 2 - 100, height / 2 + 15, 200, 20, ScreenTexts.DONE, button -> onClose()));
     }
 
     private static final int TEXT_WHITE = BackgroundHelper.ColorMixer.getArgb(255, 255, 255, 255);
@@ -40,6 +41,6 @@ public class FailedCategoryInitScreen extends Screen {
         super.render(matrices, mouseX, mouseY, delta);
         drawCenteredText(matrices, this.textRenderer, new TranslatableText("speedrunigt.message.failed_add_category", this.fileName), width / 2, height / 2 - 35, TEXT_RED);
         drawCenteredText(matrices, this.textRenderer, new TranslatableText("speedrunigt.message.failed_add_category."+exception.getReason().name().toLowerCase(Locale.ROOT)), width / 2, height / 2 - 10, TEXT_WHITE);
-        drawCenteredText(matrices, this.textRenderer, exception.getDetails(), width / 2, height / 2 + 2, TEXT_WHITE);
+        drawCenteredText(matrices, this.textRenderer, Text.of(exception.getDetails()), width / 2, height / 2 + 2, TEXT_WHITE);
     }
 }
