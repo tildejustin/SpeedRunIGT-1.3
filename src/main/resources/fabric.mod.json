@@ -20,6 +20,9 @@
     "client": [
       "com.redlimerl.speedrunigt.SpeedRunIGTClient"
     ],
+    "server": [
+      "com.redlimerl.speedrunigt.SpeedRunIGTServer"
+    ],
     "main": [
       "com.redlimerl.speedrunigt.SpeedRunIGT"
     ]
@@ -30,9 +33,8 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.12.2",
-    "minecraft": "1.17-alpha.21.3.a",
-    "java": ">=16"
+    "fabricloader": ">=0.14.20",
+    "minecraft": "1.17-alpha.21.3.a"
   },
 
   "breaks": {
