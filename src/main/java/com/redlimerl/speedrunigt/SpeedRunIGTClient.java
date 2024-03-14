@@ -7,8 +7,8 @@ import com.redlimerl.speedrunigt.instance.GameInstance;
 import com.redlimerl.speedrunigt.option.SpeedRunOption;
 import com.redlimerl.speedrunigt.timer.TimerDrawer;
 import com.redlimerl.speedrunigt.utils.FontUtils;
-import com.redlimerl.speedrunigt.utils.KeyBindingRegistry;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.client.options.KeyBinding;
@@ -48,13 +48,13 @@ public class SpeedRunIGTClient implements ClientModInitializer {
         isInitialized = true;
 
         // Key Bindings initialize
-        timerResetKeyBinding = KeyBindingRegistry.registerKeyBinding(new KeyBinding(
+        timerResetKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "speedrunigt.controls.start_timer",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_U,
                 "speedrunigt.title.options"
         ));
-        timerStopKeyBinding = KeyBindingRegistry.registerKeyBinding(new KeyBinding(
+        timerStopKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "speedrunigt.controls.stop_timer",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_I,
