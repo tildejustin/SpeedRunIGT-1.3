@@ -28,9 +28,6 @@
     "access.MinecraftClientAccessorForAttack",
     "access.WorldRendererAccessor",
 
-    "keybinding.GameOptionsMixin",
-    "keybinding.KeyBindingAccessor",
-
     "network.ClientPlayNetworkHandlerMixin",
 
     "retime.OptionButtonWidgetMixin",
@@ -42,13 +39,10 @@
     "screen.DownloadingTerrainScreenMixin",
     "screen.GameMenuScreenMixin",
     "screen.GeneratorOptionsMixin",
-    "screen.OptionsScreenMixin",
 
     "server.IntegratedServerMixin",
 
     "timeline.SoundSystemMixin",
-
-    "translate.TranslationStorageMixin",
 
     "ClientAdvancementManagerMixin",
     "ClientPlayerEntityMixin",
