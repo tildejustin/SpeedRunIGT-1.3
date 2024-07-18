@@ -39,6 +39,7 @@
     "screen.DownloadingTerrainScreenMixin",
     "screen.GameMenuScreenMixin",
     "screen.GeneratorOptionsMixin",
+    "screen.OptionsScreenMixin",
 
     "server.IntegratedServerMixin",
 
