@@ -45,6 +45,8 @@
 
     "timeline.SoundSystemMixin",
 
+    "translate.TranslationStorageMixin",
+
     "ClientAdvancementManagerMixin",
     "ClientPlayerEntityMixin",
     "ClientWorldMixin",
