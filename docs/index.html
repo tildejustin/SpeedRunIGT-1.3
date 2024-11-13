@@ -107,8 +107,18 @@
 		</div>
 	</section>
 
-	<!-- Two -->
-	<section id="two" class="wrapper">
+	<section id="two" class="wrapper style1 special">
+		<header class="major">
+			<p>YourKit supports open source projects with innovative and intelligent tools
+			for monitoring and profiling Java and .NET applications.</p>
+			<p>YourKit is the creator of <a href="https://www.yourkit.com/java/profiler/">YourKit Java Profiler</a>,
+			<a href="https://www.yourkit.com/dotnet-profiler/">YourKit .NET Profiler</a>,
+			and <a href="https://www.yourkit.com/youmonitor/">YourKit YouMonitor</a>.</p>
+		</header>
+		<div class="image"><img loading="lazy" class='clickable-img' src="https://www.yourkit.com/images/yklogo.png" alt="" /></div>
+	</section>
+
+	<section id="three" class="wrapper">
 		<div class="inner alt">
 			<section class="spotlight">
 				<div class="image"><img loading="lazy" class='clickable-img' src="https://i.imgur.com/TrlRRa7.png"
@@ -155,8 +165,7 @@
 		</div>
 	</section>
 
-	<!-- Three -->
-	<section id="three" class="wrapper style2 special">
+	<section id="four" class="wrapper style2 special">
 		<header class="major">
 			<h2>Users timer customization</h2>
 		</header>
@@ -179,8 +188,7 @@
 		</div>
 	</section>
 
-	<!-- Three -->
-	<section id="four" class="wrapper style1 special">
+	<section id="five" class="wrapper style1 special">
 		<header class="major">
 			<h2>Did you have any feedback or report?</h2>
 			<p>Please create an issue on Github. I'll take care of it!</p>
@@ -191,7 +199,6 @@
 	</section>
 
 
-	<!-- Footer -->
 	<footer id="footer">
 		<ul class="icons">
 			<li><a href="https://www.youtube.com/channel/UCxZDE9A8qewsM9BWNWj9nVg" target="_blank"
@@ -252,7 +259,7 @@
 			if (searchParams.has('mcversion') && mcVersions.includes(searchParams.get('mcversion'))) {
 				let param = searchParams.get('mcversion');
 				$('#download-version-mc').val(param).change();
-				$('html,body').animate({ scrollTop: $('#one').offset().top });
+				$('html,body').animate({ scrollTop: $('#one').offset().top }, 500);
 			}
 			refreshModVersions();
 		} else {
